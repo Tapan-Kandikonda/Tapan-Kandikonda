@@ -1,0 +1,52 @@
+Private Sub btnAddWorksheet_Click()
+    'incase there is an error on the user's part
+    Dim tryAgain As Integer
+    'If the entry box is left empty go to the error handler section
+    On Error GoTo errHandler
+    ':= is an assigment operator, so the below code adds a new sheet at the very beginning
+    Worksheets.Add before:=Worksheets(1)
+    'gives the user permission to add a name to the worksheet they've just created
+    ActiveSheet.Name = InputBox("Please enter a new worksheet name")
+    Exit Sub
+    
+    
+errHandler:
+    'gives the user an option to try again
+    tryAgain = MsgBox("Invalid Worksheet Name", vbYesNo)
+    ' if they click yes(6), the process reruns
+    If tryAgain = 6 Then
+        btnAddWorksheet_Click
+    Else
+        'turns off the alert to delete the worksheet
+        Application.DisplayAlerts = False
+        ' If they press no, it deletes the worksheet
+        ActiveSheet.Delete
+    End If
+End Sub
+
+
+Private Sub btnRunReport_Click()
+    'Runs the yearly report module
+    LoopYearlyReport
+End Sub
+
+Private Sub cboWhichSheet_Change()
+    'allows us to add values to a drop down
+    Worksheets(Me.cboWhichSheet.Value).Select
+End Sub
+
+Private Sub UserForm_Click()
+    
+End Sub
+
+Private Sub UserForm_Initialize()
+    Dim i As Integer
+    i = 1
+    'dynamically cruns a loop to check how many sheets there are in the workbook
+    Do While i <= Worksheets.Count
+    'Adds the name of each worksheet to the drop down
+        Me.cboWhichSheet.AddItem Worksheets(i).Name
+        i = i + 1
+    Loop
+    
+End Sub
